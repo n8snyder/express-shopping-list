@@ -3,7 +3,7 @@
 const request = require("supertest");
 
 const app = require("../app");
-let {itemsDb} = require("../fakeDb");
+let { itemsDb } = require("../fakeDb");
 
 let testItem = { name: "testItem", price: "5.55" }
 
@@ -11,8 +11,8 @@ beforeEach(function () {
   itemsDb.push(testItem);
 });
 
-afterEach(function() {
-  itemsDb = [];
+afterEach(function () {
+  itemsDb.splice(0, itemsDb.length);
 });
 
 describe("POST /items", function () {
@@ -35,15 +35,20 @@ describe("POST /items", function () {
 describe("DELETE /items/:name", function () {
   it("Deletes a single a item", async function () {
 
-    console.log("db.itemsDb BEFORE", itemsDb);
-    console.log("testItem", testItem);
+    const beforeCount = itemsDb.length;
 
     const resp = await request(app)
       .delete(`/items/${testItem.name}`);
     expect(resp.body).toEqual({ message: "Deleted." });
+    expect(itemsDb.length).toEqual(beforeCount - 1);
+  });
+  it("Fails to delete", async function () {
 
-    console.log("db.itemsDb AFTER", itemsDb);
+    const beforeCount = itemsDb.length;
 
-    expect(itemsDb.length).toEqual(0);
+    const resp = await request(app)
+      .delete(`/items/FAKE_NAME`);
+    expect(resp.body).toEqual({ message: "Item not found. No deletion." });
+    expect(itemsDb.length).toEqual(beforeCount);
   });
 });
