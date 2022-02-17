@@ -1,6 +1,6 @@
 const express = require("express");
 
-const itemsRoutes = require("./routes/items");
+const itemsRoutes = require("./itemRoutes");
 // const { NotFoundError } = require("./expressError");
 
 const app = express();

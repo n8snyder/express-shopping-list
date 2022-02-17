@@ -17,11 +17,10 @@ router.post("/", function (req, res) {
 
     //     {name: "popsicle", price: 1.45} =>
     //   {added: {name: "popsicle", price: 1.45}}
-    console.log("req.body:", req.body);
+
     const newItem = req.body;
     itemsDb.push(newItem);
-    console.log(itemsDb);
-    return res.json({ added: newItem });
+    return res.status(201).json({ added: newItem });
 
 });
 
@@ -35,6 +34,15 @@ router.patch("/:name", function (req, res) {
 
 router.delete("/:name", function (req, res) {
 
+    const itemName = req.params.name;
+
+    for (let idx in itemsDb){
+        if(itemsDb[idx].name === itemName){
+            itemsDb.splice(idx,1);
+            return res.json({message: "Deleted."});
+        }
+    }
+    return res.json({message: "Item not found. No deletion."});
 });
 
 
