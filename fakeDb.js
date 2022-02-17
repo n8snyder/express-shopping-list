@@ -1,5 +1,5 @@
 "use strict";
 
-const items = [];
+const itemsDb = [];
 
-module.exports = { items };
+module.exports = { itemsDb };
